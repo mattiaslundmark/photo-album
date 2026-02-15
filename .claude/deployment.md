@@ -111,6 +111,32 @@ Creates a compressed archive in `./backups/`
 ./restore.sh ./backups/photo-album-backup-YYYYMMDD_HHMMSS.tar.gz
 ```
 
+## CLI Batch Upload
+
+Upload an entire folder of images using the command line script:
+
+```bash
+# Interactive mode - prompts for credentials and album selection
+./upload-folder.sh /path/to/photos
+
+# With environment variables
+PHOTO_ALBUM_URL=https://photos.example.com \
+PHOTO_ALBUM_USER=admin \
+PHOTO_ALBUM_PASS=secret \
+./upload-folder.sh /path/to/photos
+
+# Specify album ID directly
+./upload-folder.sh /path/to/photos album-uuid
+```
+
+**Requirements:** `curl` and `jq`
+
+**Features:**
+- Authenticates using the same JWT system as the web interface
+- Lists existing albums or creates a new one (uses folder name as default title)
+- Uploads all images (jpg, jpeg, png, gif, webp, heic, heif)
+- Shows progress with success/failure for each file
+
 ## Costs
 
 Estimated monthly costs with Scaleway:

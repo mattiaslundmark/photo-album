@@ -191,6 +191,8 @@ Upload a photo to an album (admin only).
 }
 ```
 
+**CLI Usage:** Use `upload-folder.sh` for batch uploads via command line. See deployment.md for details.
+
 ## Image Proxy
 
 ### GET /api/image/[...path]
