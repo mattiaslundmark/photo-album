@@ -9,15 +9,22 @@ import {
 } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 
+const endpoint = process.env.SCW_ENDPOINT ?? 'https://s3.fr-par.scw.cloud';
+
 const s3Client = new S3Client({
-  endpoint: process.env.SCW_ENDPOINT || 'https://s3.fr-par.scw.cloud',
-  region: process.env.SCW_REGION || 'fr-par',
+  endpoint,
+  region: process.env.SCW_REGION ?? 'fr-par',
   credentials: {
-    accessKeyId: process.env.SCW_ACCESS_KEY || '',
-    secretAccessKey: process.env.SCW_SECRET_KEY || '',
+    accessKeyId: process.env.SCW_ACCESS_KEY ?? '',
+    secretAccessKey: process.env.SCW_SECRET_KEY ?? '',
   },
-  // Use path-style for MinIO (localhost), virtual-hosted style for Scaleway
-  forcePathStyle: process.env.SCW_ENDPOINT?.includes('localhost') ?? false,
+  // Use path-style for non-Scaleway endpoints (local Garage, etc.)
+  forcePathStyle: !endpoint.includes('scw.cloud'),
+  // Disable flexible checksums — newer SDK versions add x-amz-checksum-mode
+  // headers by default which non-AWS S3 servers (Garage, etc.) don't support
+  // in signature verification, causing InvalidSignature errors.
+  requestChecksumCalculation: 'WHEN_REQUIRED',
+  responseChecksumValidation: 'WHEN_REQUIRED',
 });
 
 const BUCKET_NAME = process.env.SCW_BUCKET_NAME || 'photo-album';
