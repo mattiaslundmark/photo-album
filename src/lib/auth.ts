@@ -7,10 +7,21 @@ import { v4 as uuidv4 } from 'uuid';
 import { createUser, getUserByUsername, getUserById } from './data';
 import type { JWTPayload, User } from './types';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production';
 const JWT_EXPIRES_IN = '7d';
 const SALT_ROUNDS = 12;
 const COOKIE_NAME = 'auth_token';
+
+/**
+ * Get the JWT signing secret. There is deliberately no fallback: a missing
+ * secret must fail loudly rather than sign tokens with a known default.
+ */
+export function getJwtSecret(): string {
+  const secret = process.env.JWT_SECRET;
+  if (!secret) {
+    throw new Error('JWT_SECRET environment variable is not set');
+  }
+  return secret;
+}
 
 /**
  * Hash a password using bcrypt
@@ -38,7 +49,7 @@ export function generateToken(user: User): string {
     username: user.username,
     role: user.role,
   };
-  return jwt.sign(payload, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
+  return jwt.sign(payload, getJwtSecret(), { expiresIn: JWT_EXPIRES_IN });
 }
 
 /**
@@ -46,7 +57,7 @@ export function generateToken(user: User): string {
  */
 export function verifyToken(token: string): JWTPayload | null {
   try {
-    const decoded = jwt.verify(token, JWT_SECRET) as JWTPayload;
+    const decoded = jwt.verify(token, getJwtSecret()) as JWTPayload;
     return decoded;
   } catch {
     return null;
