@@ -115,34 +115,6 @@ export async function getCurrentUser(): Promise<User | null> {
 }
 
 /**
- * Get auth token from request headers
- */
-export function getTokenFromHeaders(headers: Headers): string | null {
-  const authHeader = headers.get('authorization');
-  if (authHeader?.startsWith('Bearer ')) {
-    return authHeader.slice(7);
-  }
-  return null;
-}
-
-/**
- * Get user from request (headers or cookies)
- */
-export async function getUserFromRequest(request: Request): Promise<User | null> {
-  // Try Authorization header first
-  const headerToken = getTokenFromHeaders(request.headers);
-  if (headerToken) {
-    const payload = verifyToken(headerToken);
-    if (payload) {
-      return getUserById(payload.userId);
-    }
-  }
-
-  // Fall back to cookies
-  return getCurrentUser();
-}
-
-/**
  * Check if user is admin
  */
 export async function isAdmin(): Promise<boolean> {

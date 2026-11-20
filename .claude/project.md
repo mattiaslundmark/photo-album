@@ -39,8 +39,7 @@ photo-album/
 ├── Dockerfile.scaleway         # Docker configuration
 ├── deploy.sh                   # Deployment script
 ├── backup.sh                   # Backup script
-├── restore.sh                  # Restore script
-└── upload-folder.sh            # CLI batch upload script
+└── restore.sh                  # Restore script
 ```
 
 ## Key Features
@@ -48,7 +47,6 @@ photo-album/
 - **Public Albums**: Portfolio/showcase galleries visible to everyone
 - **Private Albums**: Family photos requiring authentication
 - **Admin Dashboard**: Upload photos, manage albums, configure visibility
-- **CLI Batch Upload**: Upload entire folders via command line script
 - **Image Processing**: Automatic thumbnail generation, resize large images
 - **Responsive Design**: Mobile-friendly gallery with lightbox viewer
 - **Consistent UI**: Thumbnails and album covers share the same grid layout

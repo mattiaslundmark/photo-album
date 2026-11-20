@@ -18,8 +18,7 @@ Login with username and password.
 {
   "success": true,
   "data": {
-    "user": { "id": "string", "username": "string", "role": "admin|viewer" },
-    "token": "string"
+    "user": { "id": "string", "username": "string", "role": "admin|viewer" }
   }
 }
 ```
@@ -190,8 +189,6 @@ Upload a photo to an album (admin only).
   }
 }
 ```
-
-**CLI Usage:** Use `upload-folder.sh` for batch uploads via command line. See deployment.md for details.
 
 ## Image Proxy
 
