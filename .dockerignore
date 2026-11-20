@@ -1,0 +1,9 @@
+# Keep secrets and local state out of the Docker build context
+.env*
+!.env.example
+.git
+.garage
+.next
+node_modules
+backups
+*.pem
