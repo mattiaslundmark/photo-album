@@ -41,22 +41,22 @@ export default function AdminPage() {
   }, [user, authLoading, router]);
 
   useEffect(() => {
-    if (user?.role === 'admin') {
-      fetchAlbums();
-    }
-  }, [user]);
+    if (user?.role !== 'admin') return;
 
-  const fetchAlbums = async () => {
-    try {
-      const res = await fetch('/api/albums');
-      const data = await res.json();
-      if (data.success) {
-        setAlbums(data.data.albums);
+    const fetchAlbums = async () => {
+      try {
+        const res = await fetch('/api/albums');
+        const data = await res.json();
+        if (data.success) {
+          setAlbums(data.data.albums);
+        }
+      } finally {
+        setLoading(false);
       }
-    } finally {
-      setLoading(false);
-    }
-  };
+    };
+
+    fetchAlbums();
+  }, [user]);
 
   const fetchPhotos = async (albumId: string) => {
     try {

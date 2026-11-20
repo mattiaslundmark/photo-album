@@ -22,6 +22,17 @@ interface AuthContextType {
   refresh: () => Promise<void>;
 }
 
+async function fetchCurrentUser(): Promise<User | null> {
+  try {
+    const res = await fetch('/api/auth/verify');
+    if (!res.ok) return null;
+    const data = await res.json();
+    return data.success ? data.data.user : null;
+  } catch {
+    return null;
+  }
+}
+
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
@@ -29,27 +40,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   const refresh = async () => {
-    try {
-      const res = await fetch('/api/auth/verify');
-      if (res.ok) {
-        const data = await res.json();
-        if (data.success) {
-          setUser(data.data.user);
-        } else {
-          setUser(null);
-        }
-      } else {
-        setUser(null);
-      }
-    } catch {
-      setUser(null);
-    } finally {
-      setLoading(false);
-    }
+    setUser(await fetchCurrentUser());
+    setLoading(false);
   };
 
   useEffect(() => {
-    refresh();
+    fetchCurrentUser().then((currentUser) => {
+      setUser(currentUser);
+      setLoading(false);
+    });
   }, []);
 
   const login = async (username: string, password: string): Promise<boolean> => {

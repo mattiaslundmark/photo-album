@@ -57,7 +57,7 @@ export async function GET(
     }
 
     // Return the image with appropriate headers
-    return new NextResponse(imageBuffer, {
+    return new NextResponse(new Uint8Array(imageBuffer), {
       headers: {
         'Content-Type': photo.mimeType,
         'Cache-Control': 'public, max-age=31536000, immutable',
